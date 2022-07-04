@@ -11,11 +11,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
-//@Configuration
-//@EnableSwagger2
+/**
+    Swagger JSON UI URL : http://localhost:8080/v2/api-docs
+    Swagger HTML UI URL : http://localhost:8080/swagger-ui.html
+ */
+@Configuration
+@EnableSwagger2
 public class SwaggerConfig {
 
-//    @Bean
+    @Bean
     public Docket api() {
 
         return new Docket(DocumentationType.SWAGGER_2)
