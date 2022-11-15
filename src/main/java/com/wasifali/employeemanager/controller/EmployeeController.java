@@ -1,10 +1,13 @@
 package com.wasifali.employeemanager.controller;
 
+
+import com.wasifali.employeemanager.dto.common.APIResponseCount;
 import com.wasifali.employeemanager.model.Employee;
 import com.wasifali.employeemanager.service.EmployeeService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +34,33 @@ public class EmployeeController {
     @ApiResponses(value={
             @ApiResponse(code = 200, message = "Successfully retrieved list")
     })
+
+
     @GetMapping("/all")
     public ResponseEntity<List<Employee>> getAllEmployees(){
         List<Employee> employees=employeeService.findAllEmployees();
         return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+
+    // find all employee records with sorting
+    @GetMapping("/all/{field}")
+    public APIResponseCount<List<Employee>> getAllEmployeesWithSorting(@PathVariable String field){
+        List<Employee> employees=employeeService.findAllEmployeesWithSorting(field);
+        return new APIResponseCount<>(employees.size(), employees);
+    }
+
+    //find all employees with pagination
+    @GetMapping("/all/pagination/{offset}/{pageSize}")
+    public APIResponseCount<Page<Employee>> getAllEmployeesWithPagination(@PathVariable int offset, @PathVariable int pageSize){
+        Page<Employee> employees=employeeService.findAllEmployeesWithPagination(offset, pageSize);
+        return new APIResponseCount<>(employees.getSize(), employees);
+    }
+
+    //find all employees with pagination and sorting
+    @GetMapping("/all/pagination/{offset}/{pageSize}/{field}")
+    public APIResponseCount<Page<Employee>> getAllEmployeesWithPagination(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field){
+        Page<Employee> employees=employeeService.findAllEmployeesWithPaginationAndSorting(offset, pageSize, field);
+        return new APIResponseCount<>(employees.getSize(), employees);
     }
 
     @GetMapping("/find/{id}")
